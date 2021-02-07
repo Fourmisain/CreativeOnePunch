@@ -1,0 +1,25 @@
+{
+	"schemaVersion": 1,
+	"id": "creativeonepunch",
+	"version": "${version}",
+	"name": "Creative One-Punch",
+	"description": "One-Punch any entity when in creative mode - except when holding a weapon",
+	"authors": [
+		"Fourmisain"
+	],
+	"contact": {},
+	"license": "MIT",
+	"icon": "assets/creativeonepunch/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"fourmisain.creativeonepunch.CreativeOnePunch"
+		]
+	},
+	"mixins": [],
+	"depends": {
+		"fabricloader": ">=0.11.1",
+		"fabric": "*",
+		"minecraft": ">=1.16.2"
+	}
+}
