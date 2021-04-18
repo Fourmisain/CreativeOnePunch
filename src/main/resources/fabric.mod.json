@@ -7,7 +7,11 @@
 	"authors": [
 		"Fourmisain"
 	],
-	"contact": {},
+	"contact": {
+		"homepage": "https://www.curseforge.com/minecraft/mc-mods/creative-one-punch",
+		"issues": "https://github.com/Fourmisain/CreativeOnePunch/issues",
+		"sources": "https://github.com/Fourmisain/CreativeOnePunch"
+	},
 	"license": "MIT",
 	"icon": "assets/creativeonepunch/icon.png",
 	"environment": "*",
