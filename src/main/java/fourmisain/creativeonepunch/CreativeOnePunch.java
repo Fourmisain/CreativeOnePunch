@@ -19,6 +19,8 @@ public class CreativeOnePunch implements ModInitializer {
 
 				if (attackDamage == 0)
 					entity.damage(DamageSource.player(player), 9999);
+
+				return ActionResult.SUCCESS;
 			}
 
 			return ActionResult.PASS;
