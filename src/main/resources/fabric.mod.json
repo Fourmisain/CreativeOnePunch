@@ -15,10 +15,11 @@
 	"license": "MIT",
 	"icon": "assets/creativeonepunch/icon.png",
 	"environment": "*",
-	"mixins": [],
+	"mixins": [
+		"creativeonepunch.mixins.json"
+	],
 	"depends": {
 		"fabricloader": "*",
-		"fabric": "*",
-		"minecraft": ">=1.16.0"
+		"minecraft": "*"
 	}
 }
