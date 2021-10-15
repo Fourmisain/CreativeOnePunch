@@ -17,8 +17,10 @@ public class CreativeOnePunch implements ModInitializer {
 				for (EntityAttributeModifier modifier : player.getMainHandStack().getAttributeModifiers(EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_DAMAGE))
 					attackDamage += modifier.getValue();
 
-				if (attackDamage == 0)
+				if (attackDamage == 0) {
 					entity.damage(DamageSource.player(player), 9999);
+					return ActionResult.SUCCESS;
+				}
 			}
 
 			return ActionResult.PASS;
