@@ -15,11 +15,6 @@
 	"license": "MIT",
 	"icon": "assets/creativeonepunch/icon.png",
 	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"fourmisain.creativeonepunch.CreativeOnePunch"
-		]
-	},
 	"mixins": [],
 	"depends": {
 		"fabricloader": "*",
