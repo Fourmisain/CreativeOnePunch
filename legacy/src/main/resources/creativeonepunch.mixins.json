@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "fourmisain.creativeonepunch.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "PlayerEntityLegacyMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

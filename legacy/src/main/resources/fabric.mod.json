@@ -1,0 +1,25 @@
+{
+	"schemaVersion": 1,
+	"id": "creativeonepunch",
+	"version": "${version}",
+	"name": "Creative One-Punch",
+	"description": "One-Punch any entity when in creative mode - except when holding a weapon",
+	"authors": [
+		"Fourmisain"
+	],
+	"contact": {
+		"homepage": "https://www.curseforge.com/minecraft/mc-mods/creative-one-punch",
+		"issues": "https://github.com/Fourmisain/CreativeOnePunch/issues",
+		"sources": "https://github.com/Fourmisain/CreativeOnePunch"
+	},
+	"license": "MIT",
+	"icon": "assets/creativeonepunch/icon.png",
+	"environment": "*",
+	"mixins": [
+		"creativeonepunch.mixins.json"
+	],
+	"depends": {
+		"fabricloader": "*",
+		"minecraft": "<1.16"
+	}
+}

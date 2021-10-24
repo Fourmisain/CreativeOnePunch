@@ -1,0 +1,4 @@
+{
+  "compatibilityLevel": "JAVA_8",
+  "plugin": "fourmisain.creativeonepunch.MixinPlugin"
+}
