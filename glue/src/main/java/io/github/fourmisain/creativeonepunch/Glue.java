@@ -1,4 +1,4 @@
-package fourmisain.creativeonepunch;
+package io.github.fourmisain.creativeonepunch;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;

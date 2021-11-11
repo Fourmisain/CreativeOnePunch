@@ -1,4 +1,4 @@
-package fourmisain.creativeonepunch;
+package io.github.fourmisain.creativeonepunch;
 
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;

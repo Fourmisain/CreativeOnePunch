@@ -1,4 +1,4 @@
-package fourmisain.creativeonepunch.mixin;
+package io.github.fourmisain.creativeonepunch.mixin;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
