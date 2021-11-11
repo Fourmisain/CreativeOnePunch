@@ -12,7 +12,7 @@ import static net.minecraft.entity.attribute.EntityAttributeModifier.Operation.A
 
 // for pre-1.16
 @Mixin(PlayerEntity.class)
-public class PlayerEntityLegacyMixin {
+public abstract class PlayerEntityLegacyMixin {
 	@ModifyArgs(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
 	public void onePunch(Args args) {
 		PlayerEntity player = (PlayerEntity) (Object) this;

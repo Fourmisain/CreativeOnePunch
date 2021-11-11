@@ -1,26 +1,32 @@
-import com.google.gson.GsonBuilder
-
-import java.nio.charset.StandardCharsets
-import java.util.stream.Stream
-import java.util.zip.ZipEntry
-import java.util.zip.ZipOutputStream
-
-buildscript {
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath 'com.google.code.gson:gson:2.8.+'
-	}
-}
-
 plugins {
-	id 'fabric-loom' version '0.9-SNAPSHOT' apply false
+	id 'fabric-loom' version '0.10-SNAPSHOT' apply false
+	id 'glue'
 	id 'maven-publish'
 }
 
+glue {
+	// subproject names in the order they'll be merged
+	targets = ['legacy', 'main', 'glue']
+	// output path defaults to build/libs/archives_base_name-mod_version.jar
+	outputName = "${project.archives_base_name}-${project.mod_version}-universal"
+}
+
+// TODO this won't show up in IntelliJ's Gradle tool window, but applying the java plugin annoyingly creates an empty jar
+tasks.register('build') {
+	finalizedBy 'glue'
+}
+
+tasks.register('clean', Delete) {
+	delete Glue.of(rootProject).outputFile()
+}
+
 subprojects {
-	apply plugin: "fabric-loom"
+	apply plugin: 'fabric-loom'
+
+	repositories {
+		maven { url = 'https://maven.shedaniel.me/' }
+		maven { url = 'https://maven.terraformersmc.com/' }
+	}
 
 	dependencies {
 		minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -33,10 +39,10 @@ subprojects {
 	group = rootProject.maven_group
 
 	processResources {
-		inputs.property "version", project.version
+		inputs.property 'version', project.version
 
-		filesMatching("fabric.mod.json") {
-			expand "version": project.version
+		filesMatching('fabric.mod.json') {
+			expand 'version': project.version
 		}
 	}
 
@@ -45,184 +51,16 @@ subprojects {
 	}
 
 	jar {
-		from("../LICENSE") {
+		from('../LICENSE') {
 			rename { "${it}_${archivesBaseName}"}
 		}
 	}
 }
 
-task buildMerged {
-	subprojects {
-		dependsOn it.tasks.getByName("build")
-	}
-	doLast {
-		def projects = ["legacy", "main", "glue"]
-		def jars = projects.collect { readJarMap(projectOutputFile(it)) }
-		def modJsons = jars.collect { toJsonString(it.get("fabric.mod.json")) }
-		def refmaps = jars.collect { toJsonString(it.get(refmapName())) }
-		def mixins  = jars.collect { toJsonString(it.get(mixinConfigName())) }
-
-		def gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-
-		def modJsonStructs = modJsons.collect { gson.fromJson(it, Map.class) }
-		def refmapStructs = refmaps.collect { gson.fromJson(it, Map.class) }
-		def mixinStructs =  mixins.collect  { gson.fromJson(it, Map.class) }
-
-		def mergedModJsons = modJsonStructs.inject { map1, map2 -> mergeMaps(map1, map2) }
-		def mergedRefmapStructs = refmapStructs.inject { map1, map2 -> mergeMaps(map1, map2) }
-		def mergedMixinStructs  = mixinStructs.inject  { map1, map2 -> mergeMaps(map1, map2) }
-
-		Map overwrites = new HashMap<>()
-		overwrites.put("fabric.mod.json", gson.toJson(mergedModJsons))
-		overwrites.put(refmapName(),      gson.toJson(mergedRefmapStructs))
-		overwrites.put(mixinConfigName(), gson.toJson(mergedMixinStructs))
-
-		try (def out = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(mergeOutputFile())))) {
-			jars.collect { it.entrySet().stream() }.inject { jar1, jar2 -> Stream.concat(jar1, jar2) }.forEach {
-				def path = it.key
-				def bytes = it.value
-
-				try {
-					out.putNextEntry(new ZipEntry(path))
-
-					def overwrite = overwrites.get(path)
-					if (overwrite != null) {
-						out.write(toBytes(overwrite))
-					} else {
-						out.write(bytes)
-					}
-
-					out.closeEntry();
-				} catch (e) {
-					new RuntimeException(e)
-				}
-			}
-		}
-	}
-}
-
-def readJarMap(File file) {
-	def jarMap = new HashMap<String, byte[]>()
-
-	zipTree(file).visit {
-		if (it.isDirectory()) return
-
-		try (def is = it.open()) {
-			jarMap.put(it.getPath(), is.readAllBytes())
-		}
-	}
-
-	return jarMap
-}
-
-def static mergeMixinConfigs(Map map1, Map map2) {
-	Map merged = new HashMap(map1)
-
-	def mixins1 = map1.get("mixins") ?: []
-	def mixins2 = map2.get("mixins") ?: []
-
-	def s1 = mixins1 as Set
-	def s2 = mixins2 as Set
-
-	for (def s : s1)
-		if (s2.contains(s))
-			throw new Error("mixin merge confict! duplicate " + s + ", s1 = " + s1 + ", s2 = " + s2)
-
-	def mergeMixins = [mixins1, mixins2].flatten() as String[]
-	Arrays.sort(mergeMixins)
-
-	merged.put("mixins", mergeMixins)
-
-	def mergePlugin = null
-	for (def plugin : [map1, map2].collect { it.get("plugin") }) {
-		if (plugin == null) continue
-
-		if (mergePlugin == null) {
-			mergePlugin = plugin
-		} else {
-			throw new Error("mixin merge confict! plugin1 = " + plugin + ", plugin2 = " + mergePlugin)
-		}
-	}
-
-	if (mergePlugin != null) {
-		merged.put("plugin", mergePlugin);
-	}
-
-	return merged;
-}
-
-def static mergeMaps(Map map1, Map map2) {
-	HashMap merged = new HashMap()
-	mergeInto(merged, map1)
-	mergeInto(merged, map2)
-	return merged;
-}
-
-def static mergeInto(Map target, Map source) {
-	source.forEach((k, v) -> {
-		def exist = target.get(k)
-
-		if (exist == null) {
-			target.put(k, v)
-		} else if (v instanceof Map) {
-			// merge maps
-			if (!exist instanceof Map) throw new Error("mismatched types, new: " + v + ", old: " + exist)
-
-			target.putIfAbsent(k, new HashMap())
-			mergeInto(exist, v)
-		} else if (v instanceof List) {
-			// merge lists (without duplicates)
-			if (!exist instanceof List) throw new Error("mismatched types, new: " + v + ", old: " + exist)
-
-			System.out.println((exist as Set + v as Set));
-			System.out.println((exist as Set + v as Set) as List);
-
-			target.put(k, (exist as Set + v as Set) as List)
-		} else {
-			// overwrite value
-			if (!v.equals(exist)) {
-				println "overwriting value for " + k + ", new: " + v + ", old: " + exist
-			}
-
-			target.put(k, v)
-		}
-	})
-}
-
-def refmapName() {
-	return rootProject.archives_base_name + '-refmap.json'
-}
-
-def mixinConfigName() {
-	return rootProject.archives_base_name.toLowerCase() + '.mixins.json'
-}
-
-def projectOutputFile(String projectName) {
-	return file("${projectName}/build/libs/${rootProject.archives_base_name}-${rootProject.mod_version}.jar")
-}
-
-def mergeOutputFile() {
-	return file("build/libs/${rootProject.archives_base_name}-${rootProject.mod_version}.jar")
-}
-
-def static toJsonString(byte[] b) {
-	if (b == null) return "{}";
-	return new String(b, StandardCharsets.UTF_8)
-}
-
-def static toBytes(String s) {
-	return s.getBytes(StandardCharsets.UTF_8)
-}
-
-//allprojects {
-//	apply plugin: "java"
-//}
-
 //publishing {
 //	publications {
 //		mavenJava(MavenPublication) {
-//			artifact(remapJar) { builtBy remapJar }
-//			artifact(sourcesJar) { builtBy remapSourcesJar }
+//			from components.java
 //		}
 //	}
 //

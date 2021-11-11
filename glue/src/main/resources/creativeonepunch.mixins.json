@@ -1,4 +1,4 @@
 {
   "compatibilityLevel": "JAVA_8",
-  "plugin": "fourmisain.creativeonepunch.MixinPlugin"
+  "plugin": "fourmisain.creativeonepunch.GlueMixinPlugin"
 }

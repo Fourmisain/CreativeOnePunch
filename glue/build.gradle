@@ -1,0 +1,11 @@
+targetCompatibility = sourceCompatibility = JavaVersion.VERSION_1_8
+
+dependencies {
+	implementation project(path: ":legacy", configuration: "namedElements")
+	implementation project(path: ":main", configuration: "namedElements")
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.encoding = "UTF-8"
+	it.options.release = 8
+}

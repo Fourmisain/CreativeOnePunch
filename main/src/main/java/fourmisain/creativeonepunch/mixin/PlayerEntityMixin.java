@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import static net.minecraft.entity.attribute.EntityAttributeModifier.Operation.ADDITION;
 
 @Mixin(PlayerEntity.class)
-public class PlayerEntityMixin {
+public abstract class PlayerEntityMixin {
 	@ModifyArgs(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
 	public void onePunch(Args args) {
 		PlayerEntity player = (PlayerEntity) (Object) this;
