@@ -3,6 +3,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
 import com.google.gson.GsonBuilder
+import com.google.gson.ToNumberPolicy
 
 class GluePluginExtension {
 	private Task glueTask
@@ -81,7 +82,11 @@ class Glue {
 		}
 	}
 
-	static GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+	static GSON = new GsonBuilder()
+		.setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
+		.disableHtmlEscaping()
+		.setPrettyPrinting()
+		.create();
 
 	private static Map<Project, Glue> INSTANCES = [:]
 	private Project project
