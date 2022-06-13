@@ -1,4 +1,7 @@
 {
+	"schemaVersion": 1,
+	"id": "creativeonepunch",
+	"version": "${version}",
 	"depends": {
 		"fabricloader": ">=0.12.0",
 		"minecraft": "*"
