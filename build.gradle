@@ -1,22 +1,26 @@
+import io.github.fourmisain.glue.Glue
+
 plugins {
 	id 'fabric-loom' version '0.12-SNAPSHOT' apply false
-	id 'glue'
+	id 'glue' version '0.0.2'
 	id 'maven-publish'
 }
 
 glue {
-	// subproject names in the order they'll be merged
+	// subproject names in the order they'll be glued
 	targets = ['legacy', 'main', 'glue']
 	// output path defaults to build/libs/archives_base_name-mod_version.jar
 	outputName = "${project.archives_base_name}-${project.mod_version}-universal"
 }
 
-// TODO this won't show up in IntelliJ's Gradle tool window, but applying the java plugin annoyingly creates an empty jar
+// TODO these should be part of glue
 tasks.register('build') {
+	group 'build'
 	finalizedBy 'glue'
 }
 
 tasks.register('clean', Delete) {
+	group 'build'
 	delete Glue.of(rootProject).outputFile()
 }
 

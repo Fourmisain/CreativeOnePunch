@@ -4,6 +4,10 @@ pluginManagement {
 			name = 'Fabric'
 			url = 'https://maven.fabricmc.net/'
 		}
+		maven {
+			name "Fourmisain's Maven"
+			url "https://gitlab.com/api/v4/projects/37712942/packages/maven"
+		}
 		gradlePluginPortal()
 	}
 }
