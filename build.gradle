@@ -1,8 +1,6 @@
-import io.github.fourmisain.glue.Glue
-
 plugins {
 	id 'fabric-loom' version '0.12-SNAPSHOT' apply false
-	id 'glue' version '0.0.2'
+	id 'glue' version '0.0.3'
 	id 'maven-publish'
 }
 
@@ -11,17 +9,6 @@ glue {
 	targets = ['legacy', 'main', 'glue']
 	// output path defaults to build/libs/archives_base_name-mod_version.jar
 	outputName = "${project.archives_base_name}-${project.mod_version}-universal"
-}
-
-// TODO these should be part of glue
-tasks.register('build') {
-	group 'build'
-	finalizedBy 'glue'
-}
-
-tasks.register('clean', Delete) {
-	group 'build'
-	delete Glue.of(rootProject).outputFile()
 }
 
 subprojects {
