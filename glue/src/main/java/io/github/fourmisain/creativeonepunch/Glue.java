@@ -29,16 +29,16 @@ public class Glue {
 		}
 	}
 
-	public static boolean isLegacyMinecraft() {
-		return test("minecraft", "<1.16");
-	}
-
-	public static boolean isLegacyMixin(String mixinClassName) {
-		return mixinClassName.endsWith("LegacyMixin");
-	}
-
 	public static boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		boolean shouldApply = isLegacyMixin(mixinClassName) == isLegacyMinecraft();
+		boolean shouldApply;
+
+		if (mixinClassName.endsWith("LegacyMixin")) {
+			shouldApply = test("minecraft", "<1.16");
+		} else if (mixinClassName.endsWith("Legacy2Mixin")) {
+			shouldApply = test("minecraft", ">=1.16 <1.20.5");
+		} else {
+			shouldApply = test("minecraft", ">=1.20.5");
+		}
 
 		LOGGER.debug("{}applying {}", shouldApply ? "" : "NOT ", mixinClassName);
 

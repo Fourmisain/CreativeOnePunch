@@ -1,33 +1,33 @@
 package io.github.fourmisain.creativeonepunch.mixin;
 
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
-import org.apache.commons.lang3.mutable.MutableDouble;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
-import static net.minecraft.entity.attribute.EntityAttributeModifier.Operation.ADD_VALUE;
+import static net.minecraft.entity.attribute.EntityAttributeModifier.Operation.ADDITION;
 
-// for 1.20.5+
+// 1.16 - 1.20.4
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin {
+public abstract class PlayerEntityLegacy2Mixin {
 	@ModifyArgs(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
 	public void onePunch(Args args) {
 		PlayerEntity player = (PlayerEntity) (Object) this;
 
 		if (player.isCreative()) {
 			// get main hand item attack damage (assuming multiplier is never 0)
-			MutableDouble attackDamage = new MutableDouble();
-
-			player.getMainHandStack().applyAttributeModifiers(EquipmentSlot.MAINHAND, (attribute, modifier) -> {
-				if (modifier.operation() == ADD_VALUE) {
-					attackDamage.addAndGet(modifier.value());
+			double attackDamage = 0.0;
+			for (EntityAttributeModifier modifier : player.getMainHandStack().getAttributeModifiers(EquipmentSlot.MAINHAND).get(EntityAttributes.GENERIC_ATTACK_DAMAGE)) {
+				if (modifier.getOperation() == ADDITION) {
+					attackDamage += modifier.getValue();
 				}
-			});
+			}
 
-			if (attackDamage.doubleValue() == 0.0) {
+			if (attackDamage == 0.0) {
 				// One Punch!
 				args.set(1, 9999f);
 			}

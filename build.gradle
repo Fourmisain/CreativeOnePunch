@@ -1,14 +1,19 @@
 plugins {
-	id 'fabric-loom' version '0.12-SNAPSHOT' apply false
-	id 'glue' version '0.0.3'
+	id 'fabric-loom' version '1.6-SNAPSHOT' apply false
+	id 'glue' version '0.0.5'
 	id 'maven-publish'
 }
 
 glue {
 	// subproject names in the order they'll be glued
-	targets = ['legacy', 'main', 'glue']
+	targets = ['legacy', 'legacy2', 'main', 'glue']
 	// output path defaults to build/libs/archives_base_name-mod_version.jar
 	outputName = "${project.archives_base_name}-${project.mod_version}-universal"
+}
+
+allprojects {
+	version = rootProject.mod_version
+	group = rootProject.maven_group
 }
 
 subprojects {
@@ -25,9 +30,9 @@ subprojects {
 		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	}
 
-	archivesBaseName = rootProject.archives_base_name
-	version = rootProject.mod_version
-	group = rootProject.maven_group
+	base {
+		archivesName = project.archives_base_name
+	}
 
 	processResources {
 		inputs.property 'version', project.version
@@ -37,27 +42,20 @@ subprojects {
 		}
 	}
 
-	java {
-		withSourcesJar()
-	}
-
 	jar {
 		from('../LICENSE') {
-			rename { "${it}_${archivesBaseName}"}
+			rename { "${it}_${project.base.archivesName.get()}"}
 		}
 	}
 }
 
-//publishing {
-//	publications {
-//		mavenJava(MavenPublication) {
-//			from components.java
-//		}
-//	}
-//
-//	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-//	repositories {
-//		// Add repositories to publish to here.
-//		// mavenLocal()
-//	}
-//}
+publishing {
+	publications {
+		create("mavenJava", MavenPublication) {
+			artifactId = project.archives_base_name
+			artifact "build/libs/${glue.outputName}.jar" // TODO from glue
+		}
+	}
+}
+
+tasks.publish.dependsOn('glue')

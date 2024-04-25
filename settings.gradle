@@ -14,6 +14,7 @@ pluginManagement {
 
 include("glue")
 include("legacy")
+include("legacy2")
 include("main")
 
-rootProject.name = "CreativeOnePunch"
+rootProject.name = archives_base_name
