@@ -6,7 +6,7 @@ plugins {
 
 glue {
 	// subproject names in the order they'll be glued
-	targets = ['legacy', 'legacy2', 'main', 'glue']
+	targets = ['legacy', 'legacy2', 'legacy3', 'main', 'glue']
 	// output path defaults to build/libs/archives_base_name-mod_version.jar
 	outputName = "${project.archives_base_name}-${project.mod_version}-universal"
 }

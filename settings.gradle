@@ -15,6 +15,7 @@ pluginManagement {
 include("glue")
 include("legacy")
 include("legacy2")
+include("legacy3")
 include("main")
 
 rootProject.name = archives_base_name

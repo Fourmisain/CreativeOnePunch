@@ -36,8 +36,10 @@ public class Glue {
 			shouldApply = test("minecraft", "<1.16");
 		} else if (mixinClassName.endsWith("Legacy2Mixin")) {
 			shouldApply = test("minecraft", ">=1.16 <1.20.5");
+		} else if (mixinClassName.endsWith("Legacy3Mixin")) {
+			shouldApply = test("minecraft", ">=1.20.5 <1.21.2");
 		} else {
-			shouldApply = test("minecraft", ">=1.20.5");
+			shouldApply = test("minecraft", ">=1.21.2");
 		}
 
 		LOGGER.debug("{}applying {}", shouldApply ? "" : "NOT ", mixinClassName);

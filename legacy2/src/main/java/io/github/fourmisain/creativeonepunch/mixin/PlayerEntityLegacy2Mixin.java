@@ -6,16 +6,15 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import static net.minecraft.entity.attribute.EntityAttributeModifier.Operation.ADDITION;
 
 // 1.16 - 1.20.4
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityLegacy2Mixin {
-	@ModifyArgs(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"))
-	public void onePunch(Args args) {
+	@ModifyArg(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"), index = 1)
+	public float onePunch(float originalDamage) {
 		PlayerEntity player = (PlayerEntity) (Object) this;
 
 		if (player.isCreative()) {
@@ -29,8 +28,10 @@ public abstract class PlayerEntityLegacy2Mixin {
 
 			if (attackDamage == 0.0) {
 				// One Punch!
-				args.set(1, 9999f);
+				return 9999f;
 			}
 		}
+
+		return originalDamage;
 	}
 }
