@@ -1,6 +1,6 @@
 plugins {
-	id 'fabric-loom' version '1.6-SNAPSHOT' apply false
-	id 'glue' version '0.0.5'
+	id 'fabric-loom' version '1.10-SNAPSHOT' apply false
+	id 'glue' version '0.0.6'
 	id 'maven-publish'
 }
 
@@ -19,11 +19,6 @@ allprojects {
 subprojects {
 	apply plugin: 'fabric-loom'
 
-	repositories {
-		maven { url = 'https://maven.shedaniel.me/' }
-		maven { url = 'https://maven.terraformersmc.com/' }
-	}
-
 	dependencies {
 		minecraft "com.mojang:minecraft:${project.minecraft_version}"
 		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -38,24 +33,27 @@ subprojects {
 		inputs.property 'version', project.version
 
 		filesMatching('fabric.mod.json') {
-			expand 'version': project.version
+			expand 'version': inputs.properties.version
 		}
 	}
 
 	jar {
+		inputs.property 'archivesName', project.base.archivesName
+
 		from('../LICENSE') {
-			rename { "${it}_${project.base.archivesName.get()}"}
+			rename { "${it}_${inputs.properties.archivesName}" }
 		}
 	}
 }
 
 publishing {
 	publications {
-		create("mavenJava", MavenPublication) {
+		create('mavenJava', MavenPublication) {
 			artifactId = project.archives_base_name
-			artifact "build/libs/${glue.outputName}.jar" // TODO from glue
+			assert tasks.glue.outputs.files.size() == 1
+			artifact tasks.glue.outputs.files.first()
 		}
 	}
 }
 
-tasks.publish.dependsOn('glue')
+tasks.withType(AbstractPublishToMaven).configureEach { dependsOn('glue') }

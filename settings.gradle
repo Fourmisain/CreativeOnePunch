@@ -5,17 +5,17 @@ pluginManagement {
 			url = 'https://maven.fabricmc.net/'
 		}
 		maven {
-			name "Fourmisain's Maven"
-			url "https://gitlab.com/api/v4/projects/37712942/packages/maven"
+			name = "Fourmisain's Maven"
+			url = 'https://gitlab.com/api/v4/projects/37712942/packages/maven'
 		}
 		gradlePluginPortal()
 	}
 }
 
-include("glue")
-include("legacy")
-include("legacy2")
-include("legacy3")
-include("main")
+include 'glue'
+include 'legacy'
+include 'legacy2'
+include 'legacy3'
+include 'main'
 
 rootProject.name = archives_base_name
