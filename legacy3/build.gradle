@@ -1,7 +1,0 @@
-java {
-	targetCompatibility = sourceCompatibility = JavaVersion.VERSION_21
-}
-
-tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
-}

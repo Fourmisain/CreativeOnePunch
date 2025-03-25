@@ -44,6 +44,14 @@ subprojects {
 			rename { "${it}_${inputs.properties.archivesName}" }
 		}
 	}
+
+	java {
+		targetCompatibility = sourceCompatibility = project.java_version as Integer
+	}
+
+	tasks.withType(JavaCompile).configureEach {
+		it.options.release = project.java_version as Integer
+	}
 }
 
 publishing {
