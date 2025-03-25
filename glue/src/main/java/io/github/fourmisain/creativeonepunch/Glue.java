@@ -13,6 +13,10 @@ import java.util.Optional;
 public class Glue {
 	public static final Logger LOGGER = LogManager.getLogger("glue");
 
+	public static boolean testMinecraft(String versionRange) {
+		return test("minecraft", versionRange);
+	}
+	
 	public static boolean test(String modId, String versionRange) {
 		try {
 			Optional<ModContainer> container = FabricLoader.getInstance().getModContainer(modId);
@@ -33,15 +37,15 @@ public class Glue {
 		boolean shouldApply;
 
 		if (mixinClassName.endsWith("LegacyMixin")) {
-			shouldApply = test("minecraft", "<1.16");
+			shouldApply = testMinecraft("<1.16");
 		} else if (mixinClassName.endsWith("Legacy2Mixin")) {
-			shouldApply = test("minecraft", ">=1.16 <1.20.5");
+			shouldApply = testMinecraft(">=1.16 <1.20.5");
 		} else if (mixinClassName.endsWith("Legacy3Mixin")) {
-			shouldApply = test("minecraft", ">=1.20.5 <1.21.2");
+			shouldApply = testMinecraft(">=1.20.5 <1.21.2");
 		} else if (mixinClassName.endsWith("Legacy4Mixin")) {
-			shouldApply = test("minecraft", ">=1.21.2 <1.21.5");
+			shouldApply = testMinecraft(">=1.21.2 <1.21.5");
 		} else {
-			shouldApply = test("minecraft", ">=1.21.5");
+			shouldApply = testMinecraft(">=1.21.5");
 		}
 
 		LOGGER.debug("{}applying {}", shouldApply ? "" : "NOT ", mixinClassName);
