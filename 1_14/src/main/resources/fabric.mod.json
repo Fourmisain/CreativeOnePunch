@@ -16,7 +16,7 @@
 	"icon": "assets/creativeonepunch/icon.png",
 	"environment": "*",
 	"mixins": [
-		"creativeonepunch.mixins.json"
+		"creativeonepunch.1_14.mixins.json"
 	],
 	"depends": {
 		"fabricloader": "*",

@@ -9,6 +9,15 @@ glue {
 	targets = ['1_14', '1_16', '1_20_5', '1_21_2', 'glue']
 	// output path defaults to build/libs/archives_base_name-mod_version.jar
 	outputName = "${project.archives_base_name}-${project.mod_version}-universal"
+
+	overrides = targets.collectEntries {
+		[
+			("creativeonepunch.${it}.mixins.json".toString()): [
+				"compatibilityLevel": "JAVA_8",
+				"plugin": "io.github.fourmisain.creativeonepunch.GlueMixinPlugin"
+			]
+		]
+	}
 }
 
 allprojects {
@@ -18,6 +27,12 @@ allprojects {
 
 subprojects {
 	apply plugin: 'fabric-loom'
+
+	loom {
+		mixin {
+			defaultRefmapName = "creativeonepunch.${project.name}.refmap.json"
+		}
+	}
 
 	dependencies {
 		minecraft "com.mojang:minecraft:${project.minecraft_version}"
