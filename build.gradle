@@ -1,6 +1,6 @@
 plugins {
 	id 'fabric-loom' version '1.10-SNAPSHOT' apply false
-	id 'glue' version '0.0.6'
+	id 'glue' version '0.0.7'
 	id 'maven-publish'
 }
 
