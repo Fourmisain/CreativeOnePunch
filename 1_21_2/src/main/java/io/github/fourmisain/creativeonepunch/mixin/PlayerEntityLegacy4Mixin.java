@@ -9,9 +9,9 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import static net.minecraft.entity.attribute.EntityAttributeModifier.Operation.ADD_VALUE;
 
-// for 1.21.2+
+// for 1.21.2 - 1.21.4
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin {
+public abstract class PlayerEntityLegacy4Mixin {
 	@ModifyArg(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;sidedDamage(Lnet/minecraft/entity/damage/DamageSource;F)Z"), index = 1)
 	public float onePunch(float originalDamage) {
 		PlayerEntity player = (PlayerEntity) (Object) this;

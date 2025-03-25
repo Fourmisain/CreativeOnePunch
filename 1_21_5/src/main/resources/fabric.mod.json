@@ -16,10 +16,10 @@
 	"icon": "assets/creativeonepunch/icon.png",
 	"environment": "*",
 	"mixins": [
-		"creativeonepunch.1_21_2.mixins.json"
+		"creativeonepunch.1_21_5.mixins.json"
 	],
 	"depends": {
 		"fabricloader": "*",
-		"minecraft": ">=1.21.2 <1.21.5"
+		"minecraft": ">=1.21.5"
 	}
 }

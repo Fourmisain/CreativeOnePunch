@@ -4,7 +4,7 @@
 	"package": "io.github.fourmisain.creativeonepunch.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"PlayerEntityLegacy4Mixin"
+		"PlayerEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

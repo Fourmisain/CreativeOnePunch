@@ -6,7 +6,7 @@ plugins {
 
 glue {
 	// subproject names in the order they'll be glued
-	targets = ['1_14', '1_16', '1_20_5', '1_21_2', 'glue']
+	targets = ['1_14', '1_16', '1_20_5', '1_21_2', '1_21_5', 'glue']
 	// output path defaults to build/libs/archives_base_name-mod_version.jar
 	outputName = "${project.archives_base_name}-${project.mod_version}-universal"
 
