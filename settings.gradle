@@ -13,9 +13,9 @@ pluginManagement {
 }
 
 include 'glue'
-include 'legacy'
-include 'legacy2'
-include 'legacy3'
-include 'main'
+include '1_14'
+include '1_16'
+include '1_20_5'
+include '1_21_2'
 
 rootProject.name = archives_base_name
