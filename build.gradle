@@ -1,12 +1,13 @@
 plugins {
 	id 'fabric-loom' version '1.15-SNAPSHOT' apply false
+	id 'net.fabricmc.fabric-loom' version '1.15-SNAPSHOT' apply false
 	id 'glue' version '0.0.7'
 	id 'maven-publish'
 }
 
 glue {
 	// subproject names in the order they'll be glued
-	targets = ['1_14', '1_16', '1_20_5', '1_21_2', '1_21_5', 'glue']
+	targets = ['1_14', '1_16', '1_20_5', '1_21_2', '1_21_5', '26_1', 'glue']
 	// output path defaults to build/libs/archives_base_name-mod_version.jar
 	outputName = "${project.archives_base_name}-${project.mod_version}-universal"
 
@@ -26,12 +27,19 @@ allprojects {
 }
 
 subprojects {
-	apply plugin: 'fabric-loom'
+	def obfuscated = project.hasProperty('yarn_mappings')
+
+	apply plugin: (obfuscated ? 'fabric-loom' : 'net.fabricmc.fabric-loom')
 
 	dependencies {
 		minecraft "com.mojang:minecraft:${project.minecraft_version}"
-		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-		modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+		if (obfuscated) {
+			mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+			modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+		} else {
+			implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+		}
 	}
 
 	base {

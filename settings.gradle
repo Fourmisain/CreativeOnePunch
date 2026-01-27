@@ -18,5 +18,6 @@ include '1_16'
 include '1_20_5'
 include '1_21_2'
 include '1_21_5'
+include '26_1'
 
 rootProject.name = archives_base_name
