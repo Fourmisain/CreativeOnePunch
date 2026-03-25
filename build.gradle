@@ -1,6 +1,6 @@
 plugins {
-	id 'fabric-loom' version '1.15-SNAPSHOT' apply false
-	id 'net.fabricmc.fabric-loom' version '1.15-SNAPSHOT' apply false
+	id 'fabric-loom' version "${loom_version}" apply false
+	id 'net.fabricmc.fabric-loom' version "${loom_version}" apply false
 	id 'glue' version '0.1.0'
 	id 'maven-publish'
 }
