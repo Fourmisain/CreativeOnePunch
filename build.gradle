@@ -40,6 +40,10 @@ subprojects {
 		} else {
 			implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 		}
+
+		if (project.name != 'glue') {
+			implementation project(path: ':glue', configuration: 'namedElements')
+		}
 	}
 
 	base {

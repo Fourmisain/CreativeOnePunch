@@ -5,18 +5,16 @@ import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.Version;
 import net.fabricmc.loader.api.VersionParsingException;
 import net.fabricmc.loader.api.metadata.version.VersionPredicate;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 
-public class Glue {
-	public static final Logger LOGGER = LogManager.getLogger("glue");
+import static io.github.fourmisain.creativeonepunch.CreativeOnePunch.LOGGER;
 
+public class Glue {
 	public static boolean testMinecraft(String versionRange) {
 		return test("minecraft", versionRange);
 	}
-	
+
 	public static boolean test(String modId, String versionRange) {
 		try {
 			Optional<ModContainer> container = FabricLoader.getInstance().getModContainer(modId);

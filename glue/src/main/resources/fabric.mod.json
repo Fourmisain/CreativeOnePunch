@@ -2,6 +2,11 @@
 	"schemaVersion": 1,
 	"id": "creativeonepunch",
 	"version": "${version}",
+	"entrypoints": {
+		"main": [
+			"io.github.fourmisain.creativeonepunch.CreativeOnePunch"
+		]
+	},
 	"depends": {
 		"fabricloader": ">=0.12.0",
 		"minecraft": "*"
